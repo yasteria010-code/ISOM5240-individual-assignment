@@ -45,9 +45,9 @@ def main():
      with open(uploaded_file.name, "wb"):
          file.write(byte_data)
     
-    # Button interaction
-    if st.button("Click Me"):
-    st.write("🎉 You clicked the button!"
+     # Button interaction
+     if st.button("Click Me"):
+     st.write("🎉 You clicked the button!"
      
      # display image
      st.image(upload_file, caption = "upload image", use_column_width = True)
