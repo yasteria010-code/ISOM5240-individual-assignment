@@ -16,6 +16,7 @@ def img2text(image_path):
 
 def text2story(caption):
     summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+    
     summary = summarizer(
         caption,
         max_length=120,  
