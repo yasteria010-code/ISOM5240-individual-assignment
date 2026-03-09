@@ -1,24 +1,74 @@
 import streamlit as st
 from PIL import Image
 import time
+from transformers import pipeline
 
-# App title
-st.title("Streamlit Demo on Hugging Face")
 
-# Write some text
-st.write("Welcome to a demo app showcasing basic Streamlit components!")
+# function part
 
-# File uploader for image and audio
-uploaded_image = st.file_uploader("Upload an image",
-                                  type=["jpg", "jpeg", "png"])
+# 1. image to text (captioning)            
+def img2text(image_path):
+    image_to_text_model = pipeline("image-to-text", model="Salesforce/blip-image-captioning-base")
+    caption = image_to_text_model(image_path)[0]["generated_text"]
+    return caption
 
-# Display image with spinner
-if uploaded_image is not None:
-    with st.spinner("Loading image..."):
-        time.sleep(1)  # Simulate a delay
-        image = Image.open(uploaded_image)
-        st.image(image, caption="Uploaded Image", use_column_width=True)
+# 2. text to story (limit to 50-100 words)
 
-# Button interaction
-if st.button("Click Me"):
-    st.write("🎉 You clicked the button!")
+def text2story(caption):
+    story_gen = pipeline("text-generation", model="pranavpsv/genre-story-generator-v2")
+    story = story_gen(caption, max_length=120, min_length=50)[0]['generated_text']
+    # to ensure story length is within 100 words
+    words = story.split()
+    if len(words)>100:
+       story = " ".join(words[:100])
+    return story
+
+# 3. text to audio
+def text2audio(story_text):
+    tts = pipeline("text-to-audio", model="Matthijs/mms-tts-eng")
+    audio_data = tts(story_text)
+    return audio_data
+
+
+# steamlit app 
+
+def main():
+  st.set_page_config(page_title="Image to Audio Story", page_icon = "📖")
+  st.title("📖 Storytelling App for Kids (3-10 years old)")
+  st.write("upload an image and enjoy a fun story with audio!")
+
+  upload_file = st.file_uploader("upload an image", type= ["jpg", "jpeg", "png"])
+
+  if upload_file is not None:
+     # save uploaded file locally
+     bytes_data = upload_file.getvalue()
+     with open(uploaded_file.name, "wb")
+         file.write(byte_data)
+    
+    # Button interaction
+    if st.button("Click Me"):
+    st.write("🎉 You clicked the button!"
+     
+     # display image
+     st.image(upload_file, caption = "upload image", use_column_width = True)
+
+     # stage 1: image to text
+     st.info("🔍 Generating caption from images...")
+     caption = img2text(uploaded_file.name)
+     st.write("**Caption**", caption)
+
+     # stage 2: caption to story
+     st.info("✍️ Creating a short story...")
+     story = text2story(caption)
+     st.write("**Story:**", story)
+
+     # stage 3: story to audio
+     st.info("🔉 Converting story to audio...")
+     audio_data = text2audio(story)
+
+     # play audio
+     st.audio(audio_data["audio"], sample_rate = audio_data["sampling_rate"])
+        
+
+if __name__ == "__main__":
+    main()
