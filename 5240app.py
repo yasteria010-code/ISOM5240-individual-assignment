@@ -26,7 +26,7 @@ def text2story(caption):
     # to ensure story length is within 100 words
     words = summary.split()
     if len(words)>100:
-       story = " ".join(words[:100]) + "The end!"
+       summary = " ".join(words[:100]) + "The end!"
     return summary
 
 # 3. text to audio
