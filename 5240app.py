@@ -8,7 +8,7 @@ from transformers import pipeline
 
 # 1. image to text (captioning)            
 def img2text(image_path):
-    image_to_text_model = pipeline("image-to-text", model="Salesforce/blip-image-captioning-base")
+    image_to_text_model = pipeline("image-to-text", model="Salesforce/blip-image-captioning-large")
     caption = image_to_text_model(image_path)[0]["generated_text"]
     return caption
 
