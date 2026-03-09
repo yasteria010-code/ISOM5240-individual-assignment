@@ -42,7 +42,7 @@ def main():
   if upload_file is not None:
      # save uploaded file locally
      bytes_data = upload_file.getvalue()
-     with open(uploaded_file.name, "wb"):
+     with open(upload_file.name, "wb"):
          file.write(byte_data)
     
      # Button interaction
