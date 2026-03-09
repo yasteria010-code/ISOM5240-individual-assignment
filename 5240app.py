@@ -15,6 +15,7 @@ def img2text(image_path):
 # 2. text to story (limit to 50-100 words)
 
 def text2story(caption):
+    summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
     summary = summarizer(
         caption,
         max_length=120,  
