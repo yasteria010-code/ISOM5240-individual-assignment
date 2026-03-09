@@ -16,7 +16,14 @@ def img2text(image_path):
 
 def text2story(caption):
     story_gen = pipeline("text-generation", model="pranavpsv/genre-story-generator-v2")
-    story = story_gen(caption, max_length=120, min_length=50)[0]['generated_text']
+    summary_prompt = (
+        f"Write a short summary story (50-100 words) for children "
+        f"based on this image caption:\n{caption}\n"
+        f"The story should be simple, warm, and easy to understand, "
+        f"like a summary rather than detailed events."
+    )
+    story = story_gen(summary_prompt, max_length=120, min_length=50)[0]['generated_text']
+    
     # to ensure story length is within 100 words
     words = story.split()
     if len(words)>100:
