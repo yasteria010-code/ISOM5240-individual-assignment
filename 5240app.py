@@ -8,27 +8,25 @@ from transformers import pipeline
 
 # 1. image to text (captioning)            
 def img2text(image_path):
-    image_to_text_model = pipeline("image-to-text", model="Salesforce/blip-image-captioning-large")
+    image_to_text_model = pipeline("image-to-text", model="Salesforce/blip-image-captioning-base")
     caption = image_to_text_model(image_path)[0]["generated_text"]
     return caption
 
 # 2. text to story (limit to 50-100 words)
 
 def text2story(caption):
-    story_gen = pipeline("text-generation", model="pranavpsv/genre-story-generator-v2")
-    summary_prompt = (
-        f"Write a short summary story (50-100 words) for children "
-        f"based on this image caption:\n{caption}\n"
-        f"The story should be simple, warm, and easy to understand, "
-        f"like a summary rather than detailed events."
-    )
-    story = story_gen(summary_prompt, max_length=120, min_length=50)[0]['generated_text']
-    
+    summary = summarizer(
+        caption,
+        max_length=120,  
+        min_length=50,    
+        do_sample=False
+    )[0]['summary_text']
+
     # to ensure story length is within 100 words
-    words = story.split()
+    words = summary.split()
     if len(words)>100:
-       story = " ".join(words[:100])
-    return story
+       story = " ".join(words[:100]) + "The end!"
+    return summary
 
 # 3. text to audio
 def text2audio(story_text):
