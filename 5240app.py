@@ -47,7 +47,7 @@ def main():
     
      # Button interaction
      if st.button("Click Me"):
-     st.write("🎉 You clicked the button!")
+        st.write("🎉 You clicked the button!")
      
      # display image
      st.image(upload_file, caption = "upload image", use_column_width = True)
