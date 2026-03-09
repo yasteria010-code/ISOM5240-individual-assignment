@@ -14,24 +14,20 @@ def img2text(image_path):
 
 # 2. text to story (limit to 50-100 words)
 
-def load_summarizer():
-    return pipeline("summarization", model="facebook/bart-large-cnn")
-    
-summarizer = load_summarizer()
-
 def text2story(caption):
-    summary = summarizer(
-        caption,
-        max_length=120,  
-        min_length=50,    
-        do_sample=False
-    )[0]['summary_text']
+    story_gen = pipeline("text-generation", model="pranavpsv/genre-story-generator-v2")
+    prompt = (
+        f"Write a short summary story (50-100 words) for children "
+        f"based on this image caption:\n{caption}\n"
+        f"The story should be simple, warm, and easy to understand."
+    )
+    story = story_gen(prompt, max_length=120, min_length=50, do_sample=True, top_p=0.95, temperature=0.9)[0]['generated_text']
 
     # to ensure story length is within 100 words
-    words = summary.split()
+    words = story.split()
     if len(words)>100:
-       summary = " ".join(words[:100]) + "The end!"
-    return summary
+       story = " ".join(words[:100]) + "The end!"
+    return story
 
 # 3. text to audio
 def text2audio(story_text):
