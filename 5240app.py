@@ -37,20 +37,20 @@ def main():
   st.title("📖 Storytelling App for Kids (3-10 years old)")
   st.write("upload an image and enjoy a fun story with audio!")
 
-  upload_file = st.file_uploader("upload an image", type= ["jpg", "jpeg", "png"])
+  uploaded_file = st.file_uploader("upload an image", type= ["jpg", "jpeg", "png"])
 
-  if upload_file is not None:
+  if uploaded_file is not None:
      # save uploaded file locally
-     bytes_data = upload_file.getvalue()
-     with open(upload_file.name, "wb"):
-         file.write(byte_data)
+     bytes_data = uploaded_file.getvalue()
+     with open(uploaded_file.name, "wb") as file:
+         file.write(bytes_data)
     
      # Button interaction
      if st.button("Click Me"):
         st.write("🎉 You clicked the button!")
      
      # display image
-     st.image(upload_file, caption = "upload image", use_column_width = True)
+     st.image(uploaded_file, caption = "upload image", use_column_width = True)
 
      # stage 1: image to text
      st.info("🔍 Generating caption from images...")
